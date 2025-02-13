@@ -73,7 +73,7 @@ def registration(request):
         cadd = request.POST.get('cadd')
         username = request.POST.get('username')
         password = request.POST.get('password')
-        images = request.FILES.get('images')  # Handling image upload
+        images = request.FILES.get('images') 
 
         # Create and save the user object
         user = customer(
@@ -83,14 +83,14 @@ def registration(request):
             cadd=cadd,
             username=username,
             password=password,
-            images=images  # Saving the uploaded image
+            images=images 
         )
         user.save()
 
-        # Redirect after saving the data
-        return redirect('/login')  # You can replace 'success' with the appropriate view name
+      
+        return redirect('/login') 
 
-    return render(request, 'registration.html')  # Render the form page
+    return render(request, 'registration.html') 
 def upload_image(request):
     # username=request.session.get('username')
     
@@ -104,15 +104,13 @@ def upload_image(request):
     images=customer.objects.all()
     return render(request,'upload.html',{'images':images})
 
-# ##########
+
 # View to add products to cart
 def add_to_cart(request,pk):
     username = request.session.get('username')
-
     if username is None:
         return redirect('login')
-    
-    try:
+     try:
         user = customer.objects.get(username=username)
         product = Product.objects.get(id=pk)
         # Check if the product is already in the cart
@@ -127,24 +125,19 @@ def add_to_cart(request,pk):
     except Product.DoesNotExist:
         messages.error(request, "Product not found.")
         return redirect('shop')
-
 # View to show cart items
 def view_cart(request):
     username = request.session.get('username')
     if username is None:
         return redirect('login')
-
     try:
         user = customer.objects.get(username=username)
         cart_items = Cart.objects.filter(customer=user)
-        total_price = sum(item.product.price * item.quantity for item in cart_items)
-        
+        total_price = sum(item.product.price * item.quantity for item in cart_items)        
         return render(request, 'cart.html', {'cart_items': cart_items, 'total_price': total_price, 'username': username})
-    
     except customer.DoesNotExist:
         messages.error(request, "User not found.")
         return redirect('login')
-
 # View to remove product from cart
 def remove_from_cart(request, cart_item_id):
     try:
