@@ -66,7 +66,7 @@ def logout(request):
 
 def registration(request):
     if request.method == 'POST':
-        # Extracting form data manually from the request object
+        
         cname = request.POST.get('cname')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
@@ -75,16 +75,8 @@ def registration(request):
         password = request.POST.get('password')
         images = request.FILES.get('images') 
 
-        # Create and save the user object
-        user = customer(
-            cname=cname,
-            email=email,
-            phone=phone,
-            cadd=cadd,
-            username=username,
-            password=password,
-            images=images 
-        )
+       
+        user = customer( cname=cname,email=email,phone=phone,cadd=cadd,username=username,password=password,images=images )
         user.save()
 
       
@@ -110,13 +102,12 @@ def add_to_cart(request,pk):
     username = request.session.get('username')
     if username is None:
         return redirect('login')
-     try:
+    try:
         user = customer.objects.get(username=username)
         product = Product.objects.get(id=pk)
-        # Check if the product is already in the cart
         cart_items,created = Cart.objects.get_or_create(customer=user, product=product)
         if not created:
-            cart_items.quantity += 1  # Increment quantity if the product is already in the cart
+            cart_items.quantity += 1  
             cart_items.save()
         
         messages.success(request, f"{product.name} has been added to your cart.")
