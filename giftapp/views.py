@@ -59,27 +59,20 @@ def logout(request):
     username=request.session.get('username')
     if username:
         request.session.flush()
-           
     messages.success(request, 'You have been logged out successfully.')
     return redirect('login') 
 
-
 def registration(request):
     if request.method == 'POST':
-        
         cname = request.POST.get('cname')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         cadd = request.POST.get('cadd')
         username = request.POST.get('username')
         password = request.POST.get('password')
-        images = request.FILES.get('images') 
-
-       
+        images = request.FILES.get('images')    
         user = customer( cname=cname,email=email,phone=phone,cadd=cadd,username=username,password=password,images=images )
         user.save()
-
-      
         return redirect('/login') 
 
     return render(request, 'registration.html') 
@@ -111,8 +104,7 @@ def add_to_cart(request,pk):
             cart_items.save()
         
         messages.success(request, f"{product.name} has been added to your cart.")
-        return redirect('shop')  # Redirect to shop or cart page
-    
+        return redirect('shop')  # Redirect to shop or cart page    
     except Product.DoesNotExist:
         messages.error(request, "Product not found.")
         return redirect('shop')
